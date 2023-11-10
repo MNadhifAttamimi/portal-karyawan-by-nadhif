@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { getCookie } from 'cookies-next';
@@ -6,28 +6,30 @@ import styles from '../styles/Dashboard.module.css';
 
 export default function Dashboard() {
     const router = useRouter();
+    const [username, setUsername] = useState('');
 
     useEffect(() => {
         const token = getCookie('token');
+        const usernameFromCookie = getCookie('username');
 
-        if (!token) {
+        if (!token || !usernameFromCookie) {
             router.push('/login');
+        } else {
+            setUsername(usernameFromCookie);
         }
     }, []);
 
     return (
         <div className={styles.dashboardContainer}>
-            {/* Navigasi Atas */}
             <div className={styles.navHeader}>
                 <div className={styles.title}>
-                    <h3>D E E P S.</h3>
+                    <h3>{username}</h3>
                 </div>
                 <div className={styles.logoutButton}>
                     <Link href="#">Logout</Link>
                 </div>
             </div>
 
-            {/* Navigasi Samping */}
             <div className={styles.navSide}>
                 <Link href="#" className={styles.navItem}>
                     <div className={styles.icon}>

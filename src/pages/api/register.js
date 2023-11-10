@@ -36,10 +36,6 @@ if (mongoose.models.user) {
             type: String,
             require: true,
         },
-        nis: {
-            type: String,
-            require: true,
-        },
         token: {
             type: String,
             default: '',
@@ -62,9 +58,6 @@ export default async function handler(req, res) {
             return res.status(400).json({ error: true, message: 'tidak ada Nama' });
         }
 
-        if (!nis) {
-            return res.status(400).json({ error: true, message: 'tidak ada NIS' });
-        }
 
         if (!password) {
             return res
@@ -80,12 +73,6 @@ export default async function handler(req, res) {
             });
         }
 
-        if (nis.length !== 5) {
-            return res.status(400).json({
-                error: true,
-                message: 'nis harus 5 karakter',
-            });
-        }
 
         if (password.length < 6 || password.length >= 10) {
             return res.status(400).json({
@@ -98,24 +85,24 @@ export default async function handler(req, res) {
         const user = await Users.findOne({ nis });
         console.log('user: ', user);
 
-        if (user && user.nis) {
+        if (user && user.password) {
             return res.status(400).json({
                 error: true,
-                message: 'nis sudah pernah didaftarkan',
+                message: 'user sudah pernah didaftarkan',
             });
         }
 
         // Lengkapi data yang kurang
         const id = uuid();
 
-        const data = { id, name, nis, password };
+        const data = { id, name, password };
 
         // Jika sudah sesuai, simpan
         const newUser = new Users(data);
         await newUser.save();
 
         // Kasih tahu client (hanya data yang diperbolehkan)
-        return res.status(201).json({ id: newUser.id, nis: newUser.nis });
+        return res.status(201).json({ id: newUser.id, password: newUser.password });
     } catch (error) {
         console.log('error:', error);
         res

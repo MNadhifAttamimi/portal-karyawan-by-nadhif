@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 const connectMongoDB = async () => {
     try {
         await mongoose.connect(
-            'mongodb+srv://ppqita:santri@ppqitadb.76fharf.mongodb.net/portal-siswa',
+            'mongodb+srv://mnadhif:9841185n@cluster0.jp7etyc.mongodb.net/',
             {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
@@ -65,7 +65,7 @@ export default async function handler(req, res) {
         const user = await Users.findOne({ token });
         console.log('user: ', user);
 
-        if (!user || !user.nis) {
+        if (!user || !user.password) {
             return res.status(400).json({
                 error: true,
                 message: 'token tidak valid',
@@ -73,7 +73,7 @@ export default async function handler(req, res) {
         }
 
         // Kasih tahu client (hanya data yang diperbolehkan)
-        return res.status(200).json({ id: user.id, nis: user.nis });
+        return res.status(200).json({ id: user.id, password: user.password });
     } catch (error) {
         console.log('error:', error);
         res

@@ -5,7 +5,7 @@ import styles from '../styles/Login.module.css';
 export default function Login() {
     const router = useRouter(); // Menggunakan useRouter untuk navigasi
 
-    const [nis, setNis] = useState('');
+    const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [loginError, setLoginError] = useState('');
 
@@ -14,7 +14,7 @@ export default function Login() {
             // Lakukan permintaan ke server untuk validasi login
             const response = await fetch('/api/login', {
                 method: 'POST',
-                body: JSON.stringify({ nis, password }),
+                body: JSON.stringify({ name, password }),
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -44,14 +44,14 @@ export default function Login() {
                 <p className={styles.enter}>Enter your NIS and password to sign in!</p>
                 <form id="login-form" className={styles.form}>
                     <div className={styles.inputContainer}>
-                        <label htmlFor="nis">NIS</label>
+                        <label htmlFor="name">Name</label>
                         <input
                             type="text"
-                            id="nis"
+                            id="name"
                             className={styles.input}
-                            placeholder="Enter your NIS"
-                            value={nis}
-                            onChange={(e) => setNis(e.target.value)}
+                            placeholder="Enter your name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                         />
                     </div>
                     <div className={styles.inputContainer}>

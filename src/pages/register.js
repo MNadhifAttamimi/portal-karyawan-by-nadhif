@@ -6,20 +6,17 @@ export default function Register({ nextPage, previousPage }) {
     const router = useRouter(); // Menggunakan useRouter untuk navigasi
 
     const [name, setName] = useState('');
-    const [nis, setNis] = useState('');
     const [password, setPassword] = useState('');
 
     const register = async () => {
         // Membuat objek untuk mewakili data
         const data = {
             name: name,
-            nis: nis,
             password: password
         };
 
         // Tampilkan nilai di konsol (sebagai contoh)
         console.log('Name:', name);
-        console.log('NIS:', nis);
         console.log('Password:', password);
 
         try {
@@ -32,11 +29,14 @@ export default function Register({ nextPage, previousPage }) {
             });
 
             if (res.ok) {
-                // Periksa apakah respons memiliki status code 200 (OK)
-                const responseData = await res.json(); // Mendapatkan data JSON dari respons
-                console.log(responseData);
+                const responseData = await res.json();
+
+                // Set cookie for the client-side
+                document.cookie = `token=${responseData.token}; max-age=${responseData.tokenExpiration}; secure; samesite=None`;
+                document.cookie = `username=${responseData.name}; max-age=${responseData.tokenExpiration}; secure; samesite=None`;
+
                 alert('Data sudah sukses didaftarkan');
-                router.push('/login'); // Menggunakan router untuk navigasi
+                router.push('/login');
             } else {
                 console.error('Gagal melakukan permintaan:', res.status);
                 alert('Data gagal didaftarkan');
@@ -62,17 +62,6 @@ export default function Register({ nextPage, previousPage }) {
                             placeholder="Enter your name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                        />
-                    </div>
-                    <div className={styles.inputContainer}>
-                        <label htmlFor="nis">NIS</label>
-                        <input
-                            type="text"
-                            id="nis"
-                            className={styles.input}
-                            placeholder="Enter your NIS"
-                            value={nis}
-                            onChange={(e) => setNis(e.target.value)}
                         />
                     </div>
                     <div className={styles.inputContainer}>

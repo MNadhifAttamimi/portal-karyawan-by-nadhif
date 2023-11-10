@@ -13,10 +13,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    nis: {
-        type: String,
-        required: true,
-    },
     token: {
         type: String,
         default: '',
